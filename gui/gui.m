@@ -1,4 +1,4 @@
-function canvas = gui(width, height, name, selection_buttons)
+function [fig, canvas, canvas_size] = gui(width, height, name, selection_buttons)
 
 DRAW_AREA_RATIO = 0.7;
 SELECTION_BUTTONGROUP_RATIO = 0.8;
@@ -12,6 +12,7 @@ f = figure('Visible', 'off',...
 
 % Initialize the UI.
 draw_area = axes(f, 'Position', [0, (1 - DRAW_AREA_RATIO) 1 DRAW_AREA_RATIO],...
+    'Color', [0 0 0],...
     'XTick', [],...
     'YTick', []);
 main_buttongroup = uibuttongroup(f, 'Position', [0 0 1 (1 - DRAW_AREA_RATIO)]);
@@ -38,5 +39,7 @@ f.Visible = 'on';
 % function x_callback(source, eventdata)
 %   body
 % end
+fig = f;
 canvas = draw_area;
+canvas_size = round([width height] .* [1 DRAW_AREA_RATIO] + [0 20]);
 end
