@@ -41,5 +41,5 @@ f.Visible = 'on';
 % end
 fig = f;
 canvas = draw_area;
-canvas_size = round([width height] .* [1 DRAW_AREA_RATIO] + [0 20]);
+canvas_size = fliplr(round([width height] ./ 2 .* [1 DRAW_AREA_RATIO]));
 end

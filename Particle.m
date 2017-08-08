@@ -19,6 +19,22 @@ classdef Particle
             p.color = color;
         end
         
+        function r = plus(l1, l2)
+            r = cell2mat(arrayfun(@(x, y) plus_single(x, y), l1, l2));
+        end
+        
+        function r = plus_single(obj1, obj2)
+            if obj1 == Particle.None && obj2 ~= Particle.None
+                r = obj2;
+            elseif obj1 ~= Particle.None && obj2 == Particle.None
+                r = obj1;
+            elseif obj1 ~= Particle.None && obj2 ~= Particle.None
+                r = obj1;
+            elseif obj1 == Particle.None && obj2 == Particle.None
+                r = obj1;
+            end
+        end
+        
         function is = is_none(obj)
             is = obj == Particle.None;
         end
