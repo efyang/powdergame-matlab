@@ -7,15 +7,23 @@ warning('off', 'all');
 addpath('gui');
 [fig, canvas, canvas_size] = gui(700, 900, 'Powder Game', []);
 global particles_matrix particles mouse_down mouse_coords program_continue
-global particle_choice temp_mask empty_mask
+global particle_choice
 program_continue = true;
 mouse_down = false;
 mouse_coords = [1 1];
-particles_matrix = repmat(struct(Particle.None), canvas_size);
+particles_matrix = ones(canvas_size);
 particles = [];
-particle_choice = Particle.Water;
-empty_mask = particles_matrix;
-temp_mask = particles_matrix;
+particle_choice = 2;
+
+% 1 is none
+% 2 is water
+% 3 is oil
+% 4 is sand
+global COLORS
+COLORS = uint8([0 0 0;...
+    0 0 255;...
+    156 70 13;...
+    194 178 128]);
 
 image_handle = imshow(render(particles_matrix));
 
