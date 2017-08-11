@@ -24,7 +24,7 @@ COLORS = uint8([0 0 0;...
     0 0 255;...
     156 70 13;...
     194 178 128]);
-
+global image_handle
 image_handle = imshow(render(particles_matrix));
 
 % setup mouse handlers
@@ -36,10 +36,3 @@ set(fig, 'DeleteFcn', @fig_delete_handler);
 
 MOUSEDRAG_TIMER_UPDATE_TIME = 1/60;
 create_update_timer(@update_handler, MOUSEDRAG_TIMER_UPDATE_TIME);
-
-DRAW_TIMER_UPDATE_TIME = 1/120;
-while program_continue
-    image_handle.CData = render(particles_matrix);
-    drawnow;
-    pause(DRAW_TIMER_UPDATE_TIME);
-end
