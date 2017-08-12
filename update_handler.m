@@ -29,7 +29,7 @@ else
         particles = [particles; new_particles];
     end
     
-    for ii = 1:5
+    for ii = 1:3
     move_particles();
     end
     image_handle.CData = render(particles_matrix);

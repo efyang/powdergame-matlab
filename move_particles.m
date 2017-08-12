@@ -4,6 +4,9 @@ global particles particles_matrix
 %   Detailed explanation goes here
 new = ones(size(particles_matrix));
 [height, width] = size(particles_matrix);
+if size(particles, 2) > 1
+    particles = sortrows(particles, 1);
+end
 
 for ii = 1:size(particles, 1)
     particle = particles(ii, :);
