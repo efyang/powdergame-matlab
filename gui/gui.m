@@ -21,8 +21,9 @@ main_buttongroup = uibuttongroup(f, 'Position', [0 0 1 (1 - DRAW_AREA_RATIO)]);
 selection_buttongroup = uibuttongroup(main_buttongroup, 'Position',...
     [0, 0, SELECTION_BUTTONGROUP_RATIO, 1]);
 
-uicontrol(selection_buttongroup, 'string', 'Water', 'style', 'pushbutton', 'callback', @pb1_cb, 'units', 'normalized', 'position', [0 0 0.5 1]);
-uicontrol(selection_buttongroup, 'string', 'Sand', 'style', 'pushbutton', 'callback', @pb2_cb, 'units', 'normalized', 'position', [0.5 0 0.5 1]);
+uicontrol(selection_buttongroup, 'string', 'Water', 'style', 'pushbutton', 'callback', @pb1_cb, 'units', 'normalized', 'position', [0 0 1/3 1]);
+uicontrol(selection_buttongroup, 'string', 'Sand', 'style', 'pushbutton', 'callback', @pb2_cb, 'units', 'normalized', 'position', [1/3 0 1/3 1]);
+uicontrol(selection_buttongroup, 'string', 'Oil', 'style', 'pushbutton', 'callback', @pb3_cb, 'units', 'normalized', 'position', [2/3 0 1/3 1]);
 
 action_buttongroup = uibuttongroup(main_buttongroup, 'Position',...
     [SELECTION_BUTTONGROUP_RATIO, 0, (1 - SELECTION_BUTTONGROUP_RATIO), 1]);
@@ -62,6 +63,11 @@ end
 function pb2_cb(~, ~, ~)
 global particle_choice
 particle_choice = 4;
+end
+
+function pb3_cb(~, ~, ~)
+global particle_choice
+particle_choice = 3;
 end
 
 function reset_cb(~, ~, ~)

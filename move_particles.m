@@ -16,8 +16,13 @@ for ii = 1:size(particles, 1)
     switch particle_type
         case 2
             % water: absolutely disgusting but should work
+            if py > 1 && particles_matrix(py - 1, px) == 4
+                % swap positions with the sand particle - the same
+                % thing is done for a sand particle above a water
+                % particle, so that both are properly swapped
+                new_coordinate = [px, py - 1];
             % bottom edge case
-            if py == height
+            elseif py == height
                 new_coordinate = pick_side_coordinate(px, py, width, new);
             else
                 bottomx = max(1, px - 1):min(width, px + 1);
@@ -26,12 +31,34 @@ for ii = 1:size(particles, 1)
                 allowed_positions = bottom_values == 1 & bottom_values_new == 1;
                 total_allowed = sum(allowed_positions);
                 % do a check for sand particles above
-                if py > 1 && particles_matrix(py - 1, px) == 4
-                    % swap positions with the sand particle - the same
-                    % thing is done for a sand particle above a water
-                    % particle, so that both are properly swapped
-                    new_coordinate = [px, py - 1];
-                elseif total_allowed == 0
+                if total_allowed == 0
+                    % the bottom is full - go to the side
+                    new_coordinate = pick_side_coordinate(px, py, width, new);
+                elseif py < width && particles_matrix(py + 1, px) == 3
+                    new_coordinate = [px, py + 1];
+                else
+                    % pick from the bottom
+                    new_coordinate = pick_bottom_coordinate(px, py + 1, width, new);
+                end
+            end
+        case 3
+            % oil
+            % bottom edge case
+            if py > 1 && (particles_matrix(py - 1, px) == 4 || particles_matrix(py - 1, px) == 2)
+                % swap positions with the sand particle - the same
+                % thing is done for a sand particle above a water
+                % particle, so that both are properly swapped
+                new_coordinate = [px, py - 1];
+            elseif py == height
+                new_coordinate = pick_side_coordinate(px, py, width, new);
+            else
+                bottomx = max(1, px - 1):min(width, px + 1);
+                bottom_values_new = new(py + 1, bottomx);
+                bottom_values = particles_matrix(py + 1, bottomx);
+                allowed_positions = bottom_values == 1 & bottom_values_new == 1;
+                total_allowed = sum(allowed_positions);
+                % do a check for sand particles above
+                if total_allowed == 0
                     % the bottom is full - go to the side
                     new_coordinate = pick_side_coordinate(px, py, width, new);
                 else
@@ -40,7 +67,10 @@ for ii = 1:size(particles, 1)
                 end
             end
         case 4
-            if py < height && (particles_matrix(py + 1, px) == 1 || particles_matrix(py + 1, px) == 2)
+            % sand
+            if py < height && (particles_matrix(py + 1, px) == 1 ||...
+                    particles_matrix(py + 1, px) == 2 ||...
+                    particles_matrix(py + 1, px) == 3)
                 new_coordinate = [px, py + 1];
             else
                 new_coordinate = [px, py];

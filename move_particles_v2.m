@@ -13,6 +13,8 @@ particles_y = pad_matrix(particles_y, 0);
 px = particles(:, 1) + 1;
 py = particles(:, 2);
 particle_type = particles(:, 3);
+is_water = particle_type == 2;
+is_sand = particle_type == 4;
 
 east_neighbors_values = padded_particles(py, px + 1);
 west_neighbors_values = padded_particles(py, px - 1);
@@ -20,7 +22,7 @@ southeast_neighbors_values = padded_particles(py + 1, px + 1);
 south_neighbors_valuse = padded_particles(py + 1, px);
 southwest_neighbors_values = padded_particles(py + 1, px - 1);
 
-bottom_free = (southeast_neighbors_values == 1) | (south_neighbors_valuse == 1) | (southwest_neighbors_values == 1);
+bottom_free = ~((southeast_neighbors_values == 1) | (south_neighbors_valuse == 1) | (southwest_neighbors_values == 1));
 
 % if bottom is not free
 east_free = east_neighbors_values == 1;
