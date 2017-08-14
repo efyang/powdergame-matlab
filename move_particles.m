@@ -25,7 +25,13 @@ for ii = 1:size(particles, 1)
                 bottom_values = particles_matrix(py + 1, bottomx);
                 allowed_positions = bottom_values == 1 & bottom_values_new == 1;
                 total_allowed = sum(allowed_positions);
-                if total_allowed == 0
+                % do a check for sand particles above
+                if py > 1 && particles_matrix(py - 1, px) == 4
+                    % swap positions with the sand particle - the same
+                    % thing is done for a sand particle above a water
+                    % particle, so that both are properly swapped
+                    new_coordinate = [px, py - 1];
+                elseif total_allowed == 0
                     % the bottom is full - go to the side
                     new_coordinate = pick_side_coordinate(px, py, width, new);
                 else
@@ -34,7 +40,7 @@ for ii = 1:size(particles, 1)
                 end
             end
         case 4
-            if py < height && particles_matrix(py + 1, px) == 1
+            if py < height && (particles_matrix(py + 1, px) == 1 || particles_matrix(py + 1, px) == 2)
                 new_coordinate = [px, py + 1];
             else
                 new_coordinate = [px, py];

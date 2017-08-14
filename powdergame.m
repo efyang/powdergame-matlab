@@ -8,7 +8,7 @@ warning('off', 'all');
 global stop_sim
 stop_sim = false;
 addpath('gui');
-[fig, canvas, canvas_size] = gui(400, 500, 'Powder Game');
+[fig, canvas, canvas_size] = gui(500, 600, 'Powder Game');
 global particles_matrix particles mouse_down mouse_coords program_continue
 global particle_choice diameter
 program_continue = true;
