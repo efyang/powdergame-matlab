@@ -53,23 +53,23 @@ global particles_matrix
 % check the side to the right
 right_coord = [];
 left_coord = [];
-if px + 1 <= width && particles_matrix(py, px + 1) == 1 &&...
-        new(py, px + 1) == 1
+if px + 1 <= width && particles_matrix(py, px + 1) == 1
+    %&& new(py, px + 1) == 1
     left_coord = [px + 1, py];
 end
 % check the side to the right
-if px - 1 >= 1 && particles_matrix(py, px - 1) == 1 &&...
-        new(py, px - 1) == 1
+if px - 1 >= 1 && particles_matrix(py, px - 1) == 1
+    %&& new(py, px - 1) == 1
     right_coord = [px - 1, py];
 end
 
 if ~isempty(right_coord) && ~isempty(left_coord)
     % both open
     rng = rand;
-    if rng < 1/3
+    if rng < 3/7
         % move right
         new_coordinate = right_coord;
-    elseif rng < 2/3
+    elseif rng < 2 * (3/7)
         % move left
         new_coordinate = left_coord;
     else
@@ -79,7 +79,7 @@ if ~isempty(right_coord) && ~isempty(left_coord)
 elseif ~isempty(right_coord)
     % right open
     rng = rand;
-    if rng < 1/2
+    if rng < 5/6
         new_coordinate = right_coord;
     else
         new_coordinate = [px py];
@@ -87,12 +87,15 @@ elseif ~isempty(right_coord)
 elseif ~isempty(left_coord)
     % left open
     rng = rand;
-    if rng < 1/2
+    if rng < 5/6
         new_coordinate = left_coord;
     else
         new_coordinate = [px py];
     end
 else
+    % check if there is sand on top
+    % if there is, swap with it
+    
     new_coordinate = [px py];
 end
 end
@@ -103,27 +106,27 @@ global particles_matrix
 right_coord = [];
 left_coord = [];
 center_coord = [];
-if px + 1 <= width && particles_matrix(py, px + 1) == 1 &&...
-        new(py, px + 1) == 1
+if px + 1 <= width && particles_matrix(py, px + 1) == 1 
+    %&&... new(py, px + 1) == 1
     left_coord = [px + 1, py];
 end
 % check the side to the right
-if px - 1 >= 1 && particles_matrix(py, px - 1) == 1 &&...
-        new(py, px - 1) == 1
+if px - 1 >= 1 && particles_matrix(py, px - 1) == 1
+    %&&... new(py, px - 1) == 1
     right_coord = [px - 1, py];
 end
-if particles_matrix(py, px) == 1 &&...
-        new(py, px) == 1
+if particles_matrix(py, px) == 1
+    %&&... new(py, px) == 1
     center_coord = [px, py];
 end
 
 if ~isempty(right_coord) && ~isempty(left_coord) && ~isempty(center_coord)
     % both open
     rng = rand;
-    if rng < 1/3
+    if rng < 3/7
         % move right
         new_coordinate = right_coord;
-    elseif rng < 2/3
+    elseif rng < 2 * (3/7)
         % move left
         new_coordinate = left_coord;
     else
@@ -133,7 +136,7 @@ if ~isempty(right_coord) && ~isempty(left_coord) && ~isempty(center_coord)
 elseif ~isempty(right_coord) && ~isempty(center_coord)
     % right open
     rng = rand;
-    if rng < 1/2
+    if rng < 5/6
         new_coordinate = right_coord;
     else
         new_coordinate = [px py];
@@ -141,14 +144,14 @@ elseif ~isempty(right_coord) && ~isempty(center_coord)
 elseif ~isempty(left_coord) && ~isempty(center_coord)
     % left open
     rng = rand;
-    if rng < 1/2
+    if rng < 5/6
         new_coordinate = left_coord;
     else
         new_coordinate = [px py];
     end
 elseif ~isempty(right_coord) && ~isempty(left_coord)
     rng = rand;
-    if rng < 1/2
+    if rng < 5/6
         new_coordinate = left_coord;
     else
         new_coordinate = right_coord;

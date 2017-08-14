@@ -19,6 +19,6 @@ positions = [xs(:) ys(:)];
 
 positions(all(positions==0, 2), :) = [];
 
-mask = base_mask .* particle_type;
+mask = base_mask .* (particle_type - 1);
 
 end

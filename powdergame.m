@@ -4,16 +4,19 @@ clear all;
 clc;
 warning('off', 'all');
 
+
+global stop_sim
+stop_sim = false;
 addpath('gui');
-[fig, canvas, canvas_size] = gui(700, 900, 'Powder Game', []);
+[fig, canvas, canvas_size] = gui(400, 500, 'Powder Game');
 global particles_matrix particles mouse_down mouse_coords program_continue
 global particle_choice diameter
 program_continue = true;
 mouse_down = false;
-mouse_coords = [1 1];
+mouse_coords = canvas_size ./ 2;
 particles_matrix = ones(canvas_size);
 particles = [];
-particle_choice = 2;
+particle_choice = 4;
 diameter = 21;
 % 1 is none
 % 2 is water
@@ -34,5 +37,5 @@ set(fig, 'WindowButtonMotionFcn', @mouse_motion_handler);
 
 set(fig, 'DeleteFcn', @fig_delete_handler);
 
-MOUSEDRAG_TIMER_UPDATE_TIME = 1/60;
-create_update_timer(@update_handler, MOUSEDRAG_TIMER_UPDATE_TIME);
+UPDATE_TIME = 1/60;
+create_update_timer(@update_handler, UPDATE_TIME);
