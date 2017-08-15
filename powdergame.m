@@ -16,7 +16,7 @@ mouse_down = false;
 mouse_coords = canvas_size ./ 2;
 particles_matrix = ones(canvas_size);
 particles = [];
-particle_choice = 4;
+particle_choice = 2;
 diameter = 21;
 % 1 is none
 % 2 is water

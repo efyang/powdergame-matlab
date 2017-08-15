@@ -29,9 +29,11 @@ else
     end
     
     if ~stop_sim
+        tic
         for ii = 1:3
-            move_particles();
+            move_particles_v2();
         end
+        toc
     end
     image_handle.CData = render(particles_matrix);
     drawnow;

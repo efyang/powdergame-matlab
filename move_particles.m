@@ -157,7 +157,7 @@ if particles_matrix(py, px) == 1
 end
 
 if ~isempty(right_coord) && ~isempty(left_coord) && ~isempty(center_coord)
-    % both open
+    % all open
     rng = rand;
     if rng < 3/7
         % move right
