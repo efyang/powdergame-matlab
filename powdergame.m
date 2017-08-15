@@ -39,3 +39,5 @@ set(fig, 'DeleteFcn', @fig_delete_handler);
 
 UPDATE_TIME = 1/60;
 create_update_timer(@update_handler, UPDATE_TIME);
+DRAW_TIME = 1/60;
+create_update_timer(@draw_handler, DRAW_TIME);

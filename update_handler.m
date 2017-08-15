@@ -2,7 +2,7 @@ function update_handler(src, ~)
 %UPDATE_HANDLER Summary of this function goes here
 %   Detailed explanation goes here
 global program_continue mouse_down mouse_coords particles particles_matrix
-global particle_choice diameter image_handle stop_sim
+global particle_choice diameter stop_sim
 if ~program_continue
     stop(src);
 else
@@ -29,13 +29,9 @@ else
     end
     
     if ~stop_sim
-        tic
-        for ii = 1:3
+        for ii = 1:4
             move_particles_v2();
         end
-        toc
     end
-    image_handle.CData = render(particles_matrix);
-    drawnow;
 end
 end

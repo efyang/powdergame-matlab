@@ -6,9 +6,6 @@ new = ones(size(particles_matrix));
 [height, width] = size(particles_matrix);
 if ~isempty(particles)
     padded_particles = pad_matrix(particles_matrix, -30000);
-    %[particles_x, particles_y] = meshgrid(1:width, 1:height);
-    %particles_x = pad_matrix(particles_x, -100);
-    %particles_y = pad_matrix(particles_y, -100);
 
     px = particles(:, 1);
     py = particles(:, 2);
