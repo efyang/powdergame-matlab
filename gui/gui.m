@@ -1,5 +1,5 @@
 function [fig, canvas, canvas_size] = gui(width, height, name)
-global particle_disp speed_disp diameter_disp
+global particle_disp speed_disp diameter_disp density_disp
 DRAW_AREA_RATIO_Y = 0.9;
 DRAW_AREA_RATIO_X = 0.7;
 SELECTION_BUTTONGROUP_RATIO = 0.8;
@@ -37,19 +37,23 @@ other_buttons = uibuttongroup(f, 'Position', [DRAW_AREA_RATIO_X (1 - DRAW_AREA_R
 
 button_ratio_w = 0.8;
 button_ratio_h = 1/10;
-base_offset_h = 1/8;
-particle_group = uibuttongroup(other_buttons, 'position', [(1 - button_ratio_w)/2, 2/3 + base_offset_h, button_ratio_w, button_ratio_h]);
-speed_group = uibuttongroup(other_buttons, 'position', [(1 - button_ratio_w)/2, 1/3 + base_offset_h, button_ratio_w, button_ratio_h]);
-diameter_group = uibuttongroup(other_buttons, 'position', [(1 - button_ratio_w)/2, base_offset_h, button_ratio_w, button_ratio_h]);
+base_offset_h = 1/10;
+particle_group = uibuttongroup(other_buttons, 'position', [(1 - button_ratio_w)/2, 3/4 + base_offset_h, button_ratio_w, button_ratio_h]);
+speed_group = uibuttongroup(other_buttons, 'position', [(1 - button_ratio_w)/2, 2/4 + base_offset_h, button_ratio_w, button_ratio_h]);
+diameter_group = uibuttongroup(other_buttons, 'position', [(1 - button_ratio_w)/2, 1/4 + base_offset_h, button_ratio_w, button_ratio_h]);
+density_group = uibuttongroup(other_buttons, 'position', [(1 - button_ratio_w)/2, base_offset_h, button_ratio_w, button_ratio_h]);
 
 uicontrol(particle_group, 'string', 'Particles: ', 'style', 'pushbutton', 'units', 'normalized', 'position', [0 0 1/2 1]);
-particle_disp = uicontrol(particle_group, 'string', '0', 'style', 'edit', 'units', 'normalized', 'position', [1/2 0 1/2 1]);
+particle_disp = uicontrol(particle_group, 'style', 'edit', 'units', 'normalized', 'position', [1/2 0 1/2 1]);
 
 uicontrol(speed_group, 'string', 'Speed', 'style', 'pushbutton', 'callback', @speed_cb, 'units', 'normalized', 'position', [0 0 1/2 1]);
-speed_disp = uicontrol(speed_group, 'string', '4', 'style', 'edit', 'units', 'normalized', 'position', [1/2 0 1/2 1]);
+speed_disp = uicontrol(speed_group, 'style', 'edit', 'callback', @speed_edit_cb, 'units', 'normalized', 'position', [1/2 0 1/2 1]);
 
-uicontrol(diameter_group, 'string', 'Diameter', 'style', 'pushbutton', 'callback', @diameter_cb, 'units', 'normalized', 'position', [0 0 1/2 1]);
-diameter_disp = uicontrol(diameter_group, 'string', '21', 'style', 'edit', 'units', 'normalized', 'position', [1/2 0 1/2 1]);
+uicontrol(diameter_group, 'string', 'Diameter', 'style', 'pushbutton', 'units', 'normalized', 'position', [0 0 1/2 1]);
+diameter_disp = uicontrol(diameter_group, 'style', 'edit', 'callback', @diameter_cb, 'units', 'normalized', 'position', [1/2 0 1/2 1]);
+
+uicontrol(density_group, 'string', 'Density', 'style', 'pushbutton', 'units', 'normalized', 'position', [0 0 1/2 1]);
+density_disp = uicontrol(density_group, 'style', 'edit', 'callback', @density_cb, 'units', 'normalized', 'position', [1/2 0 1/2 1]);
 
 
 % Change units to normalized so components resize automatically.
@@ -115,5 +119,26 @@ else
 end
 end
 
-function diameter_cb(~, ~, ~)
+function speed_edit_cb(h, ~, ~)
+global speed
+input = round(str2double(h.String));
+if ~isnan(input) && input >= 1
+    speed = input;
+end
+end
+
+function diameter_cb(h, ~, ~)
+global diameter
+input = round(str2double(h.String));
+if ~isnan(input) && input >= 1
+   diameter = input; 
+end
+end
+
+function density_cb(h, ~, ~)
+global density
+input = round(str2double(h.String));
+if ~isnan(input) && input > 0 && input <= 1
+   density = input; 
+end
 end

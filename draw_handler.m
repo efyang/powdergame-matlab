@@ -1,5 +1,6 @@
 function draw_handler(src, ~)
-global program_continue particles particles_matrix image_handle particle_disp speed_disp speed
+global program_continue particles particles_matrix image_handle diameter_disp diameter
+global particle_disp speed_disp speed density density_disp
 if ~program_continue
     stop(src);
 else
@@ -7,5 +8,7 @@ else
     drawnow;
     particle_disp.String = num2str(size(particles, 1));
     speed_disp.String = num2str(speed);
+    diameter_disp.String = num2str(diameter);
+    density_disp.String = num2str(density);
 end
 end

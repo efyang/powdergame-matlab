@@ -1,13 +1,14 @@
-function [mask, positions] = create_particle_mask(diameter, allowed, particle_type)
+function [mask, positions] = create_particle_mask(diameter, allowed, particle_type, density)
+% density from 0 to 1
 random = rand([diameter diameter]);
 %values = random < 0.3;
 
 radius = diameter/2;
 
 [xx, yy] = meshgrid(1:diameter, 1:diameter);
-circle_mask = ((xx - radius).^2 + (yy - radius).^2) < radius ^ 2;
+circle_mask = ((xx - radius - 1).^2 + (yy - radius - 1).^2) < radius ^ 2;
 
-paraboloid_vals = 0.5-((xx - radius).^2 + (yy - radius).^2) / (diameter^2 / 2);
+paraboloid_vals = density -((xx - radius).^2 + (yy - radius).^2) / (diameter^2 / (density * 2));
 values = random < paraboloid_vals;
 
 base_mask = values .* circle_mask .* allowed;

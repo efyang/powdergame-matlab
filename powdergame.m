@@ -10,7 +10,7 @@ stop_sim = false;
 addpath('gui');
 [fig, canvas, canvas_size] = gui(1000, 700, 'Powder Game');
 global particles_matrix particles mouse_down mouse_coords program_continue
-global particle_choice diameter speed
+global particle_choice diameter speed density
 program_continue = true;
 mouse_down = false;
 mouse_coords = canvas_size ./ 2;
@@ -19,6 +19,7 @@ particles = [];
 particle_choice = 2;
 diameter = 21;
 speed = 4;
+density = 0.5;
 % 1 is none
 % 2 is water
 % 3 is oil

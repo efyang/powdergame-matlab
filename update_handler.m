@@ -2,7 +2,7 @@ function update_handler(src, ~)
 %UPDATE_HANDLER Summary of this function goes here
 %   Detailed explanation goes here
 global program_continue mouse_down mouse_coords particles particles_matrix
-global particle_choice diameter stop_sim speed
+global particle_choice diameter stop_sim speed density
 if ~program_continue
     stop(src);
 else
@@ -10,14 +10,19 @@ else
     % check for mouseclick/drag
     if mouse_down
         radius = floor(diameter/2);
-        xmin = mouse_coords(1) - radius;
+        if rem(diameter, 2) == 1
+            xmin = mouse_coords(1) - radius;
+            ymin = mouse_coords(2) - radius;
+        else
+            xmin = mouse_coords(1) - radius + 1;
+            ymin = mouse_coords(2) - radius + 1;
+        end
         xmax = mouse_coords(1) + radius;
-        ymin = mouse_coords(2) - radius;
         ymax = mouse_coords(2) + radius;
         
         allowed = (particles_matrix(ymin:ymax, xmin:xmax) == 1);
         
-        [mask, positions] = create_particle_mask(diameter, allowed, particle_choice);
+        [mask, positions] = create_particle_mask(diameter, allowed, particle_choice, density);
         % BUG HERE - adding on mask
         particles_matrix(ymin:ymax, xmin:xmax) = ...
             particles_matrix(ymin:ymax, xmin:xmax) + mask;
