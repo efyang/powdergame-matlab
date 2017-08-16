@@ -16,12 +16,25 @@ if ~isempty(particles)
     is_sand = particle_type == 4;
 
     % pad by one because the particles matrix is padded
-    east_neighbors_values = padded_particles(sub2ind(size(padded_particles), py, px + 2));
-    west_neighbors_values = padded_particles(sub2ind(size(padded_particles), py, px));
-    southeast_neighbors_values = padded_particles(sub2ind(size(padded_particles), py + 1, px + 2));
-    south_neighbors_values = padded_particles(sub2ind(size(padded_particles), py + 1, px + 1));
-    southwest_neighbors_values = padded_particles(sub2ind(size(padded_particles), py + 1, px));
-
+    north_neighbors_values = padded_particles(sub2ind(size(padded_particles), py, px + 1));
+    east_neighbors_values = padded_particles(sub2ind(size(padded_particles), py + 1, px + 2));
+    west_neighbors_values = padded_particles(sub2ind(size(padded_particles), py + 1, px));
+    southeast_neighbors_values = padded_particles(sub2ind(size(padded_particles), py + 2, px + 2));
+    south_neighbors_values = padded_particles(sub2ind(size(padded_particles), py + 2, px + 1));
+    southwest_neighbors_values = padded_particles(sub2ind(size(padded_particles), py + 2, px));
+    
+    % swaps
+    % fix case for water
+    water_should_swap_north = north_neighbors_values == 4;
+    water_should_swap_south = south_neighbors_values == 3 & ~water_should_swap_north;
+    water_should_swap = water_should_swap_north | water_should_swap_south;
+    sand_should_swap_south = south_neighbors_values == 2 | south_neighbors_values == 3;
+    oil_should_swap_north = north_neighbors_values == 2 | north_neighbors_values == 4;
+    
+    water_swap_y = water_should_swap_north .* (py - 1) + water_should_swap_south .* (py + 1);
+    sand_swap_y = py + 1;
+    oil_swap_y = py - 1;
+    
     bottom_free = (southeast_neighbors_values == 1) |...
         (south_neighbors_values == 1) |...
         (southwest_neighbors_values == 1);
@@ -97,8 +110,19 @@ if ~isempty(particles)
     incorrect_bottom_free_y = ((new_y_bottom_free <= 0) | (new_y_bottom_free > height));
     bottom_free_x = ~incorrect_bottom_free_x .* new_x_bottom_free + incorrect_bottom_free_x .* px;
     bottom_free_y = ~incorrect_bottom_free_y .* new_y_bottom_free + incorrect_bottom_free_y .* py;
-    new_x = bottom_free .* bottom_free_x + ~bottom_free .* bottom_not_free_x;
-    new_y = bottom_free .* bottom_free_y + ~bottom_free .* bottom_not_free_y;
+    liquid_x = bottom_free .* bottom_free_x + ~bottom_free .* bottom_not_free_x;
+    liquid_y = bottom_free .* bottom_free_y + ~bottom_free .* bottom_not_free_y;
+    % calculate next position for sand
+    solid_x = px;
+    solid_y = south_free .* (py + 1) + ~south_free .* py;
+    incorrect_solid_y = solid_y > height;
+    solid_y = ~incorrect_solid_y .* solid_y + incorrect_solid_y .* py;
+    % account for swaps
+    new_y = is_water .* (water_should_swap .* water_swap_y + ~water_should_swap .* liquid_y) +...
+            is_oil .* (oil_should_swap_north .* oil_swap_y + ~oil_should_swap_north .* liquid_y)+...
+            is_sand .* (sand_should_swap_south .* sand_swap_y + ~sand_should_swap_south .* solid_y);
+    new_x = (is_water | is_oil) .* liquid_x +...
+            is_sand .* solid_x;
     % update the cache
     particles(:, 1) = new_x;
     particles(:, 2) = new_y;
@@ -112,6 +136,7 @@ function padded = pad_matrix(matrix, pad_value)
 [height, width] = size(matrix);
 appendrow = ones(1, width + 2) .* pad_value;
 appendcol = ones(height, 1) .* pad_value;
-padded = [appendcol, matrix, appendcol;...
+padded = [appendrow;
+          appendcol, matrix, appendcol;...
           appendrow];
 end
