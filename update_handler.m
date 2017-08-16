@@ -2,14 +2,13 @@ function update_handler(src, ~)
 %UPDATE_HANDLER Summary of this function goes here
 %   Detailed explanation goes here
 global program_continue mouse_down mouse_coords particles particles_matrix
-global particle_choice diameter stop_sim
+global particle_choice diameter stop_sim speed
 if ~program_continue
     stop(src);
 else
     % Do stuff on each iteration
     % check for mouseclick/drag
     if mouse_down
-        diameter = 21;
         radius = floor(diameter/2);
         xmin = mouse_coords(1) - radius;
         xmax = mouse_coords(1) + radius;
@@ -29,7 +28,7 @@ else
     end
     
     if ~stop_sim
-        for ii = 1:4
+        for ii = 1:speed
             move_particles_v2();
         end
     end

@@ -8,9 +8,9 @@ warning('off', 'all');
 global stop_sim
 stop_sim = false;
 addpath('gui');
-[fig, canvas, canvas_size] = gui(500, 600, 'Powder Game');
+[fig, canvas, canvas_size] = gui(1000, 700, 'Powder Game');
 global particles_matrix particles mouse_down mouse_coords program_continue
-global particle_choice diameter
+global particle_choice diameter speed
 program_continue = true;
 mouse_down = false;
 mouse_coords = canvas_size ./ 2;
@@ -18,6 +18,7 @@ particles_matrix = ones(canvas_size);
 particles = [];
 particle_choice = 2;
 diameter = 21;
+speed = 4;
 % 1 is none
 % 2 is water
 % 3 is oil

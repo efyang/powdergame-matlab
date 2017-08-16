@@ -12,7 +12,7 @@ if ~isempty(particles)
     particle_type = particles(:, 3);
     
     is_water = particle_type == 2;
-    is_oil = particle_type == 3;
+    %is_oil = particle_type == 3;
     is_sand = particle_type == 4;
 
     % pad by one because the particles matrix is padded
@@ -26,14 +26,14 @@ if ~isempty(particles)
     % swaps
     % fix case for water
     water_should_swap_north = north_neighbors_values == 4;
-    water_should_swap_south = south_neighbors_values == 3 & ~water_should_swap_north;
-    water_should_swap = water_should_swap_north | water_should_swap_south;
-    sand_should_swap_south = south_neighbors_values == 2 | south_neighbors_values == 3;
-    oil_should_swap_north = north_neighbors_values == 2 | north_neighbors_values == 4;
+    %water_should_swap_south = south_neighbors_values == 3 & ~water_should_swap_north;
+    %water_should_swap = water_should_swap_north | water_should_swap_south;
+    sand_should_swap_south = south_neighbors_values == 2;
+    %oil_should_swap_north = north_neighbors_values == 2 | north_neighbors_values == 4;
     
-    water_swap_y = water_should_swap_north .* (py - 1) + water_should_swap_south .* (py + 1);
+    water_swap_y = py - 1;
     sand_swap_y = py + 1;
-    oil_swap_y = py - 1;
+    %oil_swap_y = py - 1;
     
     bottom_free = (southeast_neighbors_values == 1) |...
         (south_neighbors_values == 1) |...
@@ -113,16 +113,16 @@ if ~isempty(particles)
     liquid_x = bottom_free .* bottom_free_x + ~bottom_free .* bottom_not_free_x;
     liquid_y = bottom_free .* bottom_free_y + ~bottom_free .* bottom_not_free_y;
     % calculate next position for sand
-    solid_x = px;
-    solid_y = south_free .* (py + 1) + ~south_free .* py;
+    solid_x = bottom_free .* bottom_free_x + ~bottom_free .* px;
+    solid_y = bottom_free .* bottom_free_y + ~bottom_free .* py;
+    incorrect_solid_x = (solid_x <= 0) | (solid_x > width);
     incorrect_solid_y = solid_y > height;
+    solid_x = ~incorrect_solid_x .* solid_x + incorrect_solid_x .* px;
     solid_y = ~incorrect_solid_y .* solid_y + incorrect_solid_y .* py;
     % account for swaps
-    new_y = is_water .* (water_should_swap .* water_swap_y + ~water_should_swap .* liquid_y) +...
-            is_oil .* (oil_should_swap_north .* oil_swap_y + ~oil_should_swap_north .* liquid_y)+...
+    new_y = is_water .* (water_should_swap_north .* water_swap_y + ~water_should_swap_north .* liquid_y) +...
             is_sand .* (sand_should_swap_south .* sand_swap_y + ~sand_should_swap_south .* solid_y);
-    new_x = (is_water | is_oil) .* liquid_x +...
-            is_sand .* solid_x;
+    new_x = is_water .* liquid_x + is_sand .* solid_x;
     % update the cache
     particles(:, 1) = new_x;
     particles(:, 2) = new_y;
