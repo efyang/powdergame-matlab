@@ -46,16 +46,14 @@ if ~isempty(particles)
     only_east_free = east_free & ~west_free;
     only_west_free = west_free & ~east_free;
     rng = rand(size(particles, 1), 1);
-    east_chance = rng < 1/3;
-    west_chance = (~east_chance) .* (rng < 2/3);
-    stay_chance = ~(west_chance | east_chance);
+    east_chance = rng < 1/2;
+    west_chance = ~east_chance;
 
     side_chance = rng < 2/3;
     single_stay_chance = rng >= 2/3;
  
     new_x_both_sides_free = east_chance .* (px + 1) +...
-        west_chance .* (px - 1) +...
-        stay_chance .* px;
+        west_chance .* (px - 1);
     new_x_east_free = side_chance .* (px + 1) +...
         single_stay_chance .* px;
     new_x_west_free = side_chance .* (px - 1) +...
@@ -74,9 +72,8 @@ if ~isempty(particles)
     southwest_free = southwest_neighbors_values == 1;
     south_free = south_neighbors_values == 1;
 
-    southeast_chance = rng < 1/3;
-    southwest_chance = (~southeast_chance) .* (rng < 2/3);
-    south_stay_chance = ~(west_chance | east_chance);
+    southeast_chance = rng < 1/2;
+    southwest_chance = ~southeast_chance;
     south_side_chance = rng < 2/3;
     south_single_stay_chance = rng >= 2/3;
 
@@ -88,8 +85,7 @@ if ~isempty(particles)
     only_southeast_free = southeast_free & ~southwest_free & ~south_free;
     only_south_free = south_free & ~southeast_free & ~southwest_free;
     new_x_all_south_free = southeast_chance .* (px + 1) +...
-        southwest_chance .* (px - 1) + ...
-        south_stay_chance .* px;
+        southwest_chance .* (px - 1);
     new_x_south_sw_free = south_side_chance .* (px - 1) +...
         south_single_stay_chance .* px;
     new_x_south_se_free = south_side_chance .* (px + 1) +...
