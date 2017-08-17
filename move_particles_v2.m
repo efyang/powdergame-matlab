@@ -1,10 +1,11 @@
 function move_particles_v2
+%MOVE_PARTICLES_V2 updates particles and particles_matrix
+% most variable names are self-explanatory.
 global particles particles_matrix
-%MOVE_PARTICLES_V2 Summary of this function goes here
-%   Detailed explanation goes here
 new = ones(size(particles_matrix));
 [height, width] = size(particles_matrix);
 if ~isempty(particles)
+    % pad with a recognizable value
     padded_particles = pad_matrix(particles_matrix, -30000);
 
     px = particles(:, 1);
@@ -126,13 +127,4 @@ if ~isempty(particles)
     new(sub2ind(size(new), particles(:, 2), particles(:, 1))) = particle_type;
 end
 particles_matrix = new;
-end
-
-function padded = pad_matrix(matrix, pad_value)
-[height, width] = size(matrix);
-appendrow = ones(1, width + 2) .* pad_value;
-appendcol = ones(height, 1) .* pad_value;
-padded = [appendrow;
-          appendcol, matrix, appendcol;...
-          appendrow];
 end

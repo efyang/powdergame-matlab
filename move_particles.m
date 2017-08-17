@@ -1,7 +1,7 @@
 function move_particles
+%MOVE_PARTICLES updates the positions of the particles in both particles
+%and particles_matrix
 global particles particles_matrix
-%MOVE_PARTICLES Summary of this function goes here
-%   Detailed explanation goes here
 new = ones(size(particles_matrix));
 [height, width] = size(particles_matrix);
 if size(particles, 2) > 1
@@ -76,6 +76,7 @@ for ii = 1:size(particles, 1)
                 new_coordinate = [px, py];
             end
     end
+    % update the values
     new(new_coordinate(2), new_coordinate(1)) = particle_type;
     particles(ii, 1:2) = new_coordinate;
 end
@@ -90,12 +91,10 @@ global particles_matrix
 right_coord = [];
 left_coord = [];
 if px + 1 <= width && particles_matrix(py, px + 1) == 1
-    %&& new(py, px + 1) == 1
     left_coord = [px + 1, py];
 end
 % check the side to the right
 if px - 1 >= 1 && particles_matrix(py, px - 1) == 1
-    %&& new(py, px - 1) == 1
     right_coord = [px - 1, py];
 end
 
@@ -143,16 +142,13 @@ right_coord = [];
 left_coord = [];
 center_coord = [];
 if px + 1 <= width && particles_matrix(py, px + 1) == 1 
-    %&&... new(py, px + 1) == 1
     left_coord = [px + 1, py];
 end
 % check the side to the right
 if px - 1 >= 1 && particles_matrix(py, px - 1) == 1
-    %&&... new(py, px - 1) == 1
     right_coord = [px - 1, py];
 end
 if particles_matrix(py, px) == 1
-    %&&... new(py, px) == 1
     center_coord = [px, py];
 end
 
@@ -186,8 +182,9 @@ elseif ~isempty(left_coord) && ~isempty(center_coord)
         new_coordinate = [px py];
     end
 elseif ~isempty(right_coord) && ~isempty(left_coord)
+    % both open but not south
     rng = rand;
-    if rng < 5/6
+    if rng < 1/6
         new_coordinate = left_coord;
     else
         new_coordinate = right_coord;

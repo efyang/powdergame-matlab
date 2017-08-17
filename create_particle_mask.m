@@ -5,9 +5,11 @@ random = rand([diameter diameter]);
 
 radius = diameter/2;
 
+% limit particles to a circular spot to reduce squareness
 [xx, yy] = meshgrid(1:diameter, 1:diameter);
 circle_mask = ((xx - radius - 1).^2 + (yy - radius - 1).^2) < radius ^ 2;
 
+% parabolic distribution
 paraboloid_vals = density -((xx - radius).^2 + (yy - radius).^2) / (diameter^2 / (density * 2));
 values = random < paraboloid_vals;
 
@@ -18,6 +20,7 @@ ys = yy .* base_mask;
 
 positions = [xs(:) ys(:)];
 
+% remove anything that is not allowed
 positions(all(positions==0, 2), :) = [];
 
 mask = base_mask .* (particle_type - 1);

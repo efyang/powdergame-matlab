@@ -1,6 +1,5 @@
 function update_handler(src, ~)
-%UPDATE_HANDLER Summary of this function goes here
-%   Detailed explanation goes here
+%UPDATE_HANDLER Callback, defines the update loop
 global program_continue mouse_down mouse_coords particles particles_matrix
 global particle_choice diameter stop_sim speed density
 if ~program_continue
@@ -23,7 +22,7 @@ else
         allowed = (particles_matrix(ymin:ymax, xmin:xmax) == 1);
         
         [mask, positions] = create_particle_mask(diameter, allowed, particle_choice, density);
-        % BUG HERE - adding on mask
+        % add on the particle mask
         particles_matrix(ymin:ymax, xmin:xmax) = ...
             particles_matrix(ymin:ymax, xmin:xmax) + mask;
         new_particles = [positions, ones(size(positions, 1), 1)*particle_choice];
@@ -31,7 +30,7 @@ else
         new_particles(:, 2) = new_particles(:, 2) + mouse_coords(2) - radius;
         particles = [particles; new_particles];
     end
-    
+    % update the particles
     if ~stop_sim
         for ii = 1:speed
             move_particles_v2();
